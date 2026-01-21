@@ -1,4 +1,6 @@
+import { Injectable } from "@angular/core";
 import { User } from "../models/users";
+import { delay, Observable, of } from "rxjs";
 
 const USER_DETAILS: User[] = [
   { 
@@ -29,3 +31,18 @@ const USER_DETAILS: User[] = [
     country: 'Mauritius' 
   },
 ];
+
+@Injectable({ providedIn: 'root' })
+export class UserDetailsApiService {
+  getAllUserDetails(): Observable<User[]> {
+    /** delay of 500 milliseconds to indicate async operation */
+    return of(USER_DETAILS).pipe(delay(500));
+  }
+
+  getUserByUniqueId(id: string): Observable<User | null> {
+    const foundUserId = USER_DETAILS.find(data => data.id === id);
+    
+    /** delay of 500 milliseconds to indicate async operation */
+    return of(foundUserId ? foundUserId : null).pipe(delay(300));
+  }
+}

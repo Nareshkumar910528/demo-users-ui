@@ -33,16 +33,16 @@ const USER_DETAILS: User[] = [
 ];
 
 @Injectable({ providedIn: 'root' })
-export class UserDetailsApiService {
+export class UserDetailsService {
   getAllUserDetails(): Observable<User[]> {
-    /** delay of 500 milliseconds to indicate async operation */
-    return of(USER_DETAILS).pipe(delay(500));
+    /** delay of 1000 milliseconds to indicate async operation */
+    return of(USER_DETAILS).pipe(delay(1000));
   }
 
   getUserByUniqueId(id: string): Observable<User | null> {
     const foundUserId = USER_DETAILS.find(data => data.id === id);
     
     /** delay of 500 milliseconds to indicate async operation */
-    return of(foundUserId ? foundUserId : null).pipe(delay(300));
+    return of(foundUserId ? foundUserId : null).pipe(delay(500));
   }
 }

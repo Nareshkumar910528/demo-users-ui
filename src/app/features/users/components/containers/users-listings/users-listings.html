@@ -1,0 +1,22 @@
+<div class="listings">
+  <div>
+    <span class="total-count">
+      Total Number of Users: {{ usersStore.numberOfUsers() }}
+    </span>
+  </div>
+
+  @let currentState = usersStore.progressState();
+
+  <div class="progress">
+    <span [class]="currentState">
+      {{
+        currentState === 'loading' ? progressData.loading :
+        currentState === 'error'   ? progressData.error   :
+        currentState === 'loaded'  ? progressData.loaded  :
+        ''
+      }}
+    </span>
+  </div>
+
+  <app-users-data-table [usersData]="usersStore.users()" />
+</div>

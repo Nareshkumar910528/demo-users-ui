@@ -1,0 +1,23 @@
+.empty {
+  color: var(--grey-450);
+}
+
+.table {
+  width: 100%;
+  border: 1px solid var(--grey-450);
+  border-radius: 5px;
+
+  th,
+  td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--grey-250);
+    text-align: left;
+  }
+
+  thead th {
+    background: var(--grey-100);
+    font-weight: bold;
+  }
+}
+
+

@@ -1,0 +1,24 @@
+.listings {
+  display: grid;
+  gap: 12px;
+
+  .total-count {
+    color: var(--grey-450);
+  }
+
+  .progress {
+    font-weight: 700;
+
+    .loading {
+      color: var(--blue-500);
+    }
+
+    .loaded {
+      color: var(--green-500);
+    }
+
+    .error {
+      color: var(--red-500);
+    }
+  }
+}

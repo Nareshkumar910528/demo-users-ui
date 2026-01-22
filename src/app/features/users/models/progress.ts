@@ -1,0 +1,1 @@
+export type ProgressState = 'loading' | 'idle' | 'error' | 'loaded';

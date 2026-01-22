@@ -1,1 +1,1 @@
-export * from './user-details-api.service';
+export * from './user-details.service';

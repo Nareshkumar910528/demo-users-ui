@@ -23,7 +23,7 @@ export const PROGRESS_MESSAGE = {
   loading: 'Loading is in progress',
   error: 'Error in loading',
   loaded: 'Successfully loaded',
-} as const;
+};
 
 export const UsersStore = signalStore(
   withState(initialState),

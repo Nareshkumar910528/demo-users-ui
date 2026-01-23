@@ -1,0 +1,32 @@
+.detail {
+  display: grid;
+  gap: 12px;
+
+  .title-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .back {
+      display: inline-block;
+      margin-top: 6px;
+      color: inherit;
+    }
+  }
+
+  .progress {
+    font-weight: 700;
+
+    .loading {
+      color: var(--blue-500);
+    }
+
+    .loaded {
+      color: var(--green-500);
+    }
+
+    .error {
+      color: var(--red-500);
+    }
+  }
+}

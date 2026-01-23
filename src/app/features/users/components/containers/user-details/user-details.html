@@ -1,0 +1,26 @@
+<div class="detail">
+    <div class="title-link">
+        <div>
+            <div>Individual User Detail</div>
+        </div>
+    </div>
+
+    @let currentState = usersStore.progressState();
+
+    <div class="progress">
+        <span [class]="currentState">
+            {{
+            currentState === 'loading' ? progressMessage['loading'] :
+            currentState === 'error' ? progressMessage['error'] :
+            currentState === 'loaded' ? progressMessage['loaded'] :
+            ''
+            }}
+        </span>
+    </div>
+
+    <app-user-summary-panel [selectedUser]="usersStore.selectedUserBasedOnId()" />
+
+    <div>
+        <a class="back" routerLink="/users">View User Listings</a>
+    </div>
+</div>

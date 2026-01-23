@@ -42,7 +42,7 @@ export class UserDetailsService {
   getUserByUniqueId(id: string): Observable<User | null> {
     const foundUserId = USER_DETAILS.find(data => data.id === id);
     
-    /** delay of 500 milliseconds to indicate async operation */
-    return of(foundUserId ? foundUserId : null).pipe(delay(500));
+    /** delay of 1000 milliseconds to indicate async operation */
+    return of(foundUserId ? foundUserId : null).pipe(delay(1000));
   }
 }

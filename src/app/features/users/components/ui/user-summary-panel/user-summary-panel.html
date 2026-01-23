@@ -1,0 +1,30 @@
+@if (!selectedUser) {
+<span>User not found</span>
+} @else {
+<div class="summary-panel">
+  <div class="row">
+    <div class="label">User ID:</div>
+    <div class="value">{{ selectedUser.id }}</div>
+  </div>
+
+  <div class="row">
+    <div class="label">Name:</div>
+    <div class="value">{{ selectedUser.name }}</div>
+  </div>
+
+  <div class="row">
+    <div class="label">Contact:</div>
+    <div class="value">{{ selectedUser.contact }}</div>
+  </div>
+
+  <div class="row">
+    <div class="label">Occupation:</div>
+    <div class="value">{{ selectedUser.occupation ?? '-' }}</div>
+  </div>
+
+  <div class="row">
+    <div class="label">Country:</div>
+    <div class="value">{{ selectedUser.country }}</div>
+  </div>
+</div>
+}

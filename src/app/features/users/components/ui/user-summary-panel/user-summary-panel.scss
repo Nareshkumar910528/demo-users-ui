@@ -1,0 +1,22 @@
+.summary-panel {
+  border: 1px solid var(--grey-275);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+
+  .row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+
+    .label {
+      color: var(--grey-800);
+      margin-inline-end: 1rem;
+    }
+
+    .value {
+      font-weight: 600;
+    }
+  }
+}

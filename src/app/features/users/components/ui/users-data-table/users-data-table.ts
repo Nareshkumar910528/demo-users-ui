@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { User } from '../../../models';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-users-data-table',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './users-data-table.html',
   styleUrl: './users-data-table.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

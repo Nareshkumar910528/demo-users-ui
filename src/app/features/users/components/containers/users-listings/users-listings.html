@@ -10,9 +10,9 @@
   <div class="progress">
     <span [class]="currentState">
       {{
-        currentState === 'loading' ? progressData.loading :
-        currentState === 'error'   ? progressData.error   :
-        currentState === 'loaded'  ? progressData.loaded  :
+        currentState === 'loading' ? progressMessage['loading'] :
+        currentState === 'error' ? progressMessage['error'] :
+        currentState === 'loaded' ? progressMessage['loaded'] :
         ''
       }}
     </span>

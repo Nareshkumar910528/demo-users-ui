@@ -12,5 +12,5 @@ import { RouterLink } from '@angular/router';
 export class UsersDataTable {
   @Input({ required: true }) usersData!: User[];
 
-  emptyData: string = 'No data at the moment';
+  readonly emptyData: string = 'No data at the moment';
 }

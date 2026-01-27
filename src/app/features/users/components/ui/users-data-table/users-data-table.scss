@@ -2,22 +2,26 @@
   color: var(--grey-450);
 }
 
-.table {
-  width: 100%;
-  border: 1px solid var(--grey-450);
-  border-radius: 5px;
+.table-wrapper {
+  max-height: 14rem;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid var(--grey-250);
 
-  th,
-  td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--grey-250);
-    text-align: left;
-  }
+  .table {
+    width: 100%;
+    border-radius: 5px;
 
-  thead th {
-    background: var(--grey-100);
-    font-weight: bold;
+    th,
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--grey-250);
+      text-align: left;
+    }
+
+    thead th {
+      background: var(--grey-100);
+      font-weight: bold;
+    }
   }
 }
-
-

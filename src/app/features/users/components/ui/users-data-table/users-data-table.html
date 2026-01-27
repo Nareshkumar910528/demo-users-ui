@@ -2,26 +2,29 @@
     @if (!usersData.length) {
     <span class="empty">{{ emptyData }}</span>
     } @else {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Name</th>
-                <th>Click 'Details' to view more information about the user</th>
-            </tr>
-        </thead>
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Click 'Details' to view more information about the user</th>
+                </tr>
+            </thead>
 
-        <tbody>
-            @for (data of usersData; track data.id) {
-            <tr>
-                <td>{{ data.id }}</td>
-                <td>{{ data.name }}</td>
-                <td>
-                    <a [routerLink]="['/users', data.id]">Details</a>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
+            <tbody>
+                <!-- purpose of track is for the reusability of DOM elements -->
+                @for (data of usersData; track data.id) {
+                <tr>
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>
+                        <a [routerLink]="['/users', data.id]">Details</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     }
 </div>

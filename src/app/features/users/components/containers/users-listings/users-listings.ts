@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { injectUsersStore, PROGRESS_MESSAGE } from '../../../stores';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { injectUsersStore } from '../../../stores';
 import { UsersDataTable } from '../../ui/users-data-table/users-data-table';
 
 @Component({
@@ -9,18 +9,6 @@ import { UsersDataTable } from '../../ui/users-data-table/users-data-table';
   styleUrl: './users-listings.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UsersListings implements OnInit {
+export class UsersListings {
   readonly usersStore = injectUsersStore();
-
-  progressMessage = PROGRESS_MESSAGE;
-
-  progressData = {
-    loading: 'Loading is in progress',
-    error: 'Error in loading',
-    loaded: 'Successfully loaded'
-  };
-
-  ngOnInit() {
-    this.usersStore.loadEntireUserDetails();
-  }
 }

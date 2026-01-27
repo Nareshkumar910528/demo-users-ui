@@ -5,17 +5,8 @@
         </div>
     </div>
 
-    @let currentState = usersStore.progressState();
-
     <div class="progress">
-        <span [class]="currentState">
-            {{
-            currentState === 'loading' ? progressMessage['loading'] :
-            currentState === 'error' ? progressMessage['error'] :
-            currentState === 'loaded' ? progressMessage['loaded'] :
-            ''
-            }}
-        </span>
+        <span [class]="usersStore.progressState()">{{ usersStore.progressMessage() }}</span>
     </div>
 
     <app-user-summary-panel [selectedUser]="usersStore.selectedUserBasedOnId()" />

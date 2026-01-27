@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { injectUsersStore, PROGRESS_MESSAGE } from '../../../stores';
+import { injectUsersStore } from '../../../stores';
 import { UserSummaryPanel } from "../../ui/user-summary-panel/user-summary-panel";
 
 @Component({
@@ -13,8 +13,6 @@ import { UserSummaryPanel } from "../../ui/user-summary-panel/user-summary-panel
 export class UserDetails implements OnInit, OnDestroy {
   readonly usersStore = injectUsersStore();
   readonly #route = inject(ActivatedRoute);
-
-  progressMessage = PROGRESS_MESSAGE;
 
   ngOnInit() {
     const uniqueUserId = this.#route.snapshot.paramMap.get('userId');

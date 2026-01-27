@@ -10,4 +10,6 @@ import { User } from '../../../models';
 })
 export class UserSummaryPanel {
   @Input() selectedUser: User | null = null;
+
+  readonly emptyData: string = 'No user data found at the moment';
 }

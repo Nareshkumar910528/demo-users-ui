@@ -7,7 +7,7 @@
         <span [class]="usersStore.progressState()">{{ usersStore.progressMessage() }}</span>
     </div>
 
-    <app-user-summary-panel [selectedUser]="usersStore.selectedUserBasedOnId()" />
+    <app-user-summary-panel [selectedUser]="usersStore.userDataBySelectedId()" />
 
     <div>
         <a class="back" routerLink="/users">View User Listings</a>

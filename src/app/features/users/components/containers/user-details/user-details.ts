@@ -22,8 +22,10 @@ export class UserDetails implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.uniqueUserId()) return;
 
+    this.usersStore.getUserDataById({ userId: this.uniqueUserId()! });
+
     /** selecting a user to view his/her details */
-    this.usersStore.select(this.uniqueUserId()!);
+    // this.usersStore.select(this.uniqueUserId()!);
 
     /** check whether the user exists in store if navigates directly here */
     // this.usersStore.userExistValidation({ userId: uniqueUserId });

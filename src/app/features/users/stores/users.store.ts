@@ -24,6 +24,7 @@ interface TUsersState {
   dataAmountToDisplayPerPage: number;
   hasMoreUserData: boolean;
   isUserLoggedIn: boolean;
+  userDataBySelectedId: User | null;
 }
 
 const initialState: TUsersState = {
@@ -35,6 +36,7 @@ const initialState: TUsersState = {
   dataAmountToDisplayPerPage: 5,
   hasMoreUserData: true,
   isUserLoggedIn: false,
+  userDataBySelectedId: null,
 };
 
 export const PROGRESS_MESSAGE = {
@@ -69,7 +71,6 @@ export const UsersStore = signalStore(
         /** to prevent the function being called again when the endpoint call is in the progress */
         exhaustMap(() => {
           return userDetailsService.getAllUserDetails().pipe(
-
             /** tapResponse() is used for state handling and supports structured error handling */
             tapResponse({
               /** update the users signal with the data being returned from endpoint */
@@ -80,7 +81,7 @@ export const UsersStore = signalStore(
 
                 /** testing purpose */
                 sessionStorage.setItem('displayedUsers', JSON.stringify(userDataToDisplay));
-                
+
                 patchState(store, {
                   entireUsers: allUsersData,
                   displayedUsers: userDataToDisplay,
@@ -126,6 +127,37 @@ export const UsersStore = signalStore(
             }),
           ),
         ),
+      ),
+    ),
+
+    getUserDataById: rxMethod<{ userId: string }>(
+      pipe(
+        /** convert the object into a string */
+        map(({ userId }) => userId),
+
+        tap(() =>
+          patchState(store, {
+            userDataBySelectedId: null,
+            progressState: 'loading',
+          }),
+        ),
+        exhaustMap((userId) => {
+          return userDetailsService.getUserByUniqueId(userId).pipe(
+            tapResponse({
+              next: (userData) => {
+                if (!userData) return;
+
+                patchState(store, {
+                  userDataBySelectedId: userData,
+                  progressState: 'loaded'
+                });
+              },
+              error: () => {
+                patchState(store, { progressState: 'loaded' });
+              },
+            }),
+          );
+        }),
       ),
     ),
 

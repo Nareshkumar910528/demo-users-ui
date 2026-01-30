@@ -3,7 +3,15 @@
         <div class="title">DEMO USERS</div>
     </header>
 
-    <main class="main-content">
-        <ng-content />
-    </main>
+    <div class="body-container">
+        @if (usersStore.isUserLoggedIn()) {
+        <div class="main-content">
+            <ng-content />
+        </div>
+        } @else {
+        <button class="cta-btn" (click)="usersStore.userLogin()">
+            Login
+        </button>
+        }
+    </div>
 </div>

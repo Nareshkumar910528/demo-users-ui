@@ -71,6 +71,74 @@ const USER_DETAILS: User[] = [
     occupation: 'Actor', 
     country: 'India' 
   },
+  { 
+    id: '1011', 
+    name: 'User 11', 
+    contact: '123', 
+    occupation: 'Engineer', 
+    country: 'UAE' 
+  },
+  { 
+    id: '1012', 
+    name: 'User 12', 
+    contact: '456',
+    occupation: 'Doctor', 
+    country: 'Cyprus' 
+  },
+  { 
+    id: '1013', 
+    name: 'User 13', 
+    contact: '789',
+    country: 'Jordan' 
+  },
+  { 
+    id: '1014', 
+    name: 'User 14', 
+    contact: '012',
+    occupation: 'Pilot', 
+    country: 'Mauritius' 
+  },
+  { 
+    id: '1015', 
+    name: 'User 15', 
+    contact: '1111',
+    occupation: 'Developer', 
+    country: 'England' 
+  },
+  { 
+    id: '1016', 
+    name: 'User 16', 
+    contact: '0123',
+    occupation: 'Specialist', 
+    country: 'Canada' 
+  }, 
+  { 
+    id: '1017', 
+    name: 'User 17', 
+    contact: '0987',
+    country: 'Belgium' 
+  },
+    { 
+    id: '1018', 
+    name: 'User 18', 
+    contact: '9999',
+    occupation: 'Director', 
+    country: 'Singapore' 
+  }, 
+  { 
+    id: '1019', 
+    name: 'User 19', 
+    contact: '2345',
+    occupation: 'Dean', 
+    country: 'Japan' 
+  },
+  { 
+    id: '1020', 
+    name: 'User 20', 
+    contact: '1000',
+    occupation: 'Actor', 
+    country: 'India' 
+  }
 ];
 
 @Injectable({ providedIn: 'root' })

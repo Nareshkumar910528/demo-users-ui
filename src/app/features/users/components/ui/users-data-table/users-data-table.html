@@ -2,7 +2,7 @@
     @if (!usersData.length) {
     <span class="empty">{{ emptyData }}</span>
     } @else {
-    <div class="table-wrapper">
+    <div class="table-wrapper" (scroll)="onScrollTable($event)">
         <table class="table">
             <thead>
                 <tr>
@@ -25,6 +25,14 @@
                 }
             </tbody>
         </table>
+
+        @if (usersStore.progressState() === 'loading') {
+        <div class="gap">Loading…</div>
+        }
+        
+        @if (usersStore.progressState() === 'loaded' && !usersStore.hasMoreUserData()) {
+        <div class="gap">All the user data have been fetched</div>
+        }
     </div>
     }
 </div>

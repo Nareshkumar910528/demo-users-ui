@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { injectUsersStore } from '../../../stores';
-import { UserSummaryPanel } from "../../ui/user-summary-panel/user-summary-panel";
+import { UserSummaryPanel } from '../../ui/user-summary-panel/user-summary-panel';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -14,15 +16,17 @@ export class UserDetails implements OnInit, OnDestroy {
   readonly usersStore = injectUsersStore();
   readonly #route = inject(ActivatedRoute);
 
+  //** converts an observable into signal, with no subscription code  */
+  uniqueUserId = toSignal(this.#route.paramMap.pipe(map((params) => params.get('userId'))));
+
   ngOnInit() {
-    const uniqueUserId = this.#route.snapshot.paramMap.get('userId');
-    if (!uniqueUserId) return;
+    if (!this.uniqueUserId()) return;
 
     /** selecting a user to view his/her details */
-    this.usersStore.select(uniqueUserId);
+    this.usersStore.select(this.uniqueUserId()!);
 
     /** check whether the user exists in store if navigates directly here */
-    this.usersStore.userExistValidation({ userId: uniqueUserId });
+    // this.usersStore.userExistValidation({ userId: uniqueUserId });
   }
 
   ngOnDestroy(): void {

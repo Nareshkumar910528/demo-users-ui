@@ -9,5 +9,9 @@
     <span [class]="usersStore.progressState()">{{ usersStore.progressMessage() }}</span>
   </div>
 
-  <app-users-data-table [usersData]="usersStore.users()" />
+  <app-users-data-table [usersData]="usersStore.displayedUsers()" />
+
+  <button class="cta-btn" (click)="usersStore.userLogout()">
+    Logout
+  </button>
 </div>

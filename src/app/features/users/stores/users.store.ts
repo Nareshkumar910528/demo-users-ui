@@ -10,25 +10,35 @@ import { ProgressState, User } from '../models/index';
 import { UserDetailsService } from '../services';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe } from 'rxjs';
+import { pipe, timer } from 'rxjs';
 import { exhaustMap, filter, map, tap } from 'rxjs/operators';
 import { tapResponse } from '@ngrx/operators';
 import { eliminateDuplicatedUserId } from '../../../shared/utils/eliminate-duplicate.util';
 
 interface TUsersState {
-  users: User[];
+  entireUsers: User[];
+  displayedUsers: User[];
   selectedUserId: string | null;
   progressState: ProgressState;
+  page: number;
+  dataAmountToDisplayPerPage: number;
+  hasMoreUserData: boolean;
+  isUserLoggedIn: boolean;
 }
 
 const initialState: TUsersState = {
-  users: [],
+  entireUsers: [],
+  displayedUsers: [],
   selectedUserId: null,
   progressState: 'idle',
+  page: 0,
+  dataAmountToDisplayPerPage: 5,
+  hasMoreUserData: true,
+  isUserLoggedIn: false,
 };
 
 export const PROGRESS_MESSAGE = {
-  idle: 'No data loaded yet',
+  idle: '',
   loading: 'Loading is in progress',
   error: 'Error in loading',
   loaded: 'Successfully loaded',
@@ -41,58 +51,42 @@ export const UsersStore = signalStore(
     /**
      * rxMethod is used to replace manual subscription
      */
-    loadEntireUserDetails: rxMethod<void>(
+    loadInitialUserData: rxMethod<void>(
       /** compose operators to run in a controlled sequence */
       pipe(
-        /** for loader purpose & clear old user data */
-        tap(() => patchState(store, { users: [], progressState: 'loading' })),
+        filter(() => {
+          return store.entireUsers().length === 0 && store.progressState() !== 'loading';
+        }),
+
+        /** tap() is used to perform side effects and does not transform the stream */
+        tap(() =>
+          patchState(store, {
+            displayedUsers: [],
+            progressState: 'loading',
+          }),
+        ),
 
         /** to prevent the function being called again when the endpoint call is in the progress */
         exhaustMap(() => {
           return userDetailsService.getAllUserDetails().pipe(
+
+            /** tapResponse() is used for state handling and supports structured error handling */
             tapResponse({
               /** update the users signal with the data being returned from endpoint */
-              next: (users) => {
-                patchState(store, { users, progressState: 'loaded' });
-              },
-              error: () => {
-                patchState(store, { progressState: 'error' });
-              },
-            }),
-          );
-        }),
-      ),
-    ),
+              next: (allUsersData: User[]) => {
+                /** userDataToDisplay refers to the first group of data fetched */
+                const userDataToDisplay = allUsersData.slice(0, store.dataAmountToDisplayPerPage());
+                const isMoreUserDataExist = userDataToDisplay.length < allUsersData.length;
 
-    select(id: string | null): void {
-      patchState(store, { selectedUserId: id });
-    },
-
-    /** this method accepts an object payload */
-    userExistValidation: rxMethod<{ userId: string }>(
-      pipe(
-        /** convert the object into a string */
-        map(({ userId }) => userId),
-
-        /** continue if userId is not in the store */
-        filter((userId) => !store.users().some((data) => data.id === userId)),
-
-        tap(() => patchState(store, { progressState: 'loading' })),
-        exhaustMap((userId) => {
-          return userDetailsService.getUserByUniqueId(userId).pipe(
-            tapResponse({
-              next: (user) => {
-                if (!user) return;
-
-                patchState(store, (state) => {
-                  /** Appends the retrieved user to the users array */
-                  return {
-                    ...state,
-                    users: eliminateDuplicatedUserId([...state.users, user]),
-
-                    /** allow 'loaded' to stay as literal type 'loaded', not as a string */
-                    progressState: 'loaded' as const,
-                  };
+                /** testing purpose */
+                sessionStorage.setItem('displayedUsers', JSON.stringify(userDataToDisplay));
+                
+                patchState(store, {
+                  entireUsers: allUsersData,
+                  displayedUsers: userDataToDisplay,
+                  progressState: 'loaded',
+                  page: 1,
+                  hasMoreUserData: isMoreUserDataExist,
                 });
               },
               error: () => {
@@ -103,17 +97,122 @@ export const UsersStore = signalStore(
         }),
       ),
     ),
+
+    loadMoreUserDataAsynchronously: rxMethod<void>(
+      pipe(
+        filter(() => {
+          return store.progressState() !== 'loading' && store.hasMoreUserData();
+        }),
+        tap(() => patchState(store, { progressState: 'loading' })),
+        exhaustMap(() =>
+          /** timer(1000) is to simulate async operation */
+          timer(1000).pipe(
+            tap(() => {
+              const currentPage = store.page();
+              const dataAmountToDisplay = (currentPage + 1) * store.dataAmountToDisplayPerPage();
+
+              const nextUserDataGroup = store.entireUsers().slice(0, dataAmountToDisplay);
+              const isMoreUserDataExist = nextUserDataGroup.length < store.entireUsers().length;
+
+              /** testing purpose */
+              sessionStorage.setItem('displayedUsers', JSON.stringify(nextUserDataGroup));
+
+              patchState(store, {
+                displayedUsers: nextUserDataGroup,
+                page: currentPage + 1,
+                hasMoreUserData: isMoreUserDataExist,
+                progressState: 'loaded',
+              });
+            }),
+          ),
+        ),
+      ),
+    ),
+
+    /** NOT IN USE AT THE MOMENT */
+    loadMoreUserData(): void {
+      if (store.progressState() === 'loading') return;
+      if (!store.hasMoreUserData()) return;
+
+      const currentPage = store.page();
+      const dataAmountToDisplay = (currentPage + 1) * store.dataAmountToDisplayPerPage();
+
+      const nextUserDataGroup = store.entireUsers().slice(0, dataAmountToDisplay);
+      const isMoreUserDataExist = nextUserDataGroup.length < store.entireUsers().length;
+
+      patchState(store, {
+        entireUsers: store.entireUsers(),
+        displayedUsers: nextUserDataGroup,
+        page: currentPage + 1,
+        hasMoreUserData: isMoreUserDataExist,
+      });
+    },
+
+    select(id: string | null): void {
+      patchState(store, { selectedUserId: id });
+    },
+
+    /** NOT IN USE AT THE MOMENT */
+    /** this method accepts an object payload */
+    // userExistValidation: rxMethod<{ userId: string }>(
+    //   pipe(
+    //     /** convert the object into a string */
+    //     map(({ userId }) => userId),
+
+    //     /** continue if userId is not in the store */
+    //     filter((userId) => !store.users().some((data) => data.id === userId)),
+
+    //     tap(() => patchState(store, { progressState: 'loading' })),
+    //     exhaustMap((userId) => {
+    //       return userDetailsService.getUserByUniqueId(userId).pipe(
+    //         tapResponse({
+    //           next: (user) => {
+    //             if (!user) return;
+
+    //             patchState(store, (state) => {
+    //               /** Appends the retrieved user to the users array */
+    //               return {
+    //                 ...state,
+    //                 users: eliminateDuplicatedUserId([...state.users, user]),
+
+    //                 /** allow 'loaded' to stay as literal type 'loaded', not as a string */
+    //                 progressState: 'loaded' as const,
+    //               };
+    //             });
+    //           },
+    //           error: () => {
+    //             patchState(store, { progressState: 'error' });
+    //           },
+    //         }),
+    //       );
+    //     }),
+    //   ),
+    // ),
+
+    userLogin(): void {
+      patchState(store, { isUserLoggedIn: true });
+      this.loadInitialUserData();
+    },
+
+    userLogout(): void {
+      patchState(store, initialState);
+
+      /** testing purpose */
+      sessionStorage.removeItem('displayedUsers');
+    },
   })),
 
   withComputed((store) => ({
     /** to compute the realtime number of users */
-    numberOfUsers: computed(() => store.users().length),
+    numberOfUsers: computed(() => store.displayedUsers().length),
 
-    /** to find and return the user based on the unique id */
+    /** to find and return the user data based on the unique id */
     selectedUserBasedOnId: computed(() => {
       const uniqueId = store.selectedUserId();
       if (!uniqueId) return null;
-      return store.users().find((data) => data.id === uniqueId) ?? null;
+
+      /** find from the entire user data instead of data being displayed */
+      return store.entireUsers().find((data) => data.id === uniqueId) ?? null;
     }),
 
     /** set progress message based on the progress state */
@@ -123,7 +222,7 @@ export const UsersStore = signalStore(
   withHooks((store) => ({
     onInit() {
       /** trigger this below method when the store is instantiated */
-      store.loadEntireUserDetails();
+      // store.loadInitialUserData();
     },
   })),
 );

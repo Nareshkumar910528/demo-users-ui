@@ -153,7 +153,7 @@ export const UsersStore = signalStore(
                 });
               },
               error: () => {
-                patchState(store, { progressState: 'loaded' });
+                patchState(store, { progressState: 'error' });
               },
             }),
           );

@@ -2,12 +2,14 @@
     @if (!usersData.length) {
     <span class="empty">{{ emptyData }}</span>
     } @else {
+    <!-- User Data Table -->
     <div class="table-wrapper" (scroll)="onScrollTable($event)">
         <table class="table">
             <thead>
                 <tr>
                     <th>User ID</th>
                     <th>Name</th>
+                    <th>Occupation</th>
                     <th>Click 'Details' to view more information about the user</th>
                 </tr>
             </thead>
@@ -18,6 +20,7 @@
                 <tr>
                     <td>{{ data.id }}</td>
                     <td>{{ data.name }}</td>
+                    <td>{{ data.occupation }}</td>
                     <td>
                         <a [routerLink]="['/users', data.id]">Details</a>
                     </td>

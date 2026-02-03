@@ -25,6 +25,7 @@ interface TUsersState {
   hasMoreUserData: boolean;
   isUserLoggedIn: boolean;
   userDataBySelectedId: User | null;
+  filteredOccupation: string | null;
 }
 
 const initialState: TUsersState = {
@@ -37,6 +38,7 @@ const initialState: TUsersState = {
   hasMoreUserData: true,
   isUserLoggedIn: false,
   userDataBySelectedId: null,
+  filteredOccupation: null
 };
 
 export const PROGRESS_MESSAGE = {
@@ -49,6 +51,7 @@ export const PROGRESS_MESSAGE = {
 export const UsersStore = signalStore(
   withState(initialState),
 
+  /** functions that mutate state */
   withMethods((store, userDetailsService = inject(UserDetailsService)) => ({
     /**
      * rxMethod is used to replace manual subscription
@@ -232,8 +235,17 @@ export const UsersStore = signalStore(
       /** testing purpose */
       sessionStorage.removeItem('displayedUsers');
     },
+
+    setFilteredOccupation(occupation: string): void {
+      patchState(store, { filteredOccupation: occupation });
+    },
+
+    clearFilteredOcupation(): void {
+      patchState(store, { filteredOccupation: null });
+    }
   })),
 
+  /** derived the state */
   withComputed((store) => ({
     /** to compute the realtime number of users */
     numberOfUsers: computed(() => store.displayedUsers().length),
@@ -249,6 +261,12 @@ export const UsersStore = signalStore(
 
     /** set progress message based on the progress state */
     progressMessage: computed(() => PROGRESS_MESSAGE[store.progressState()]),
+
+    /** filtered by user id */
+    filteredDisplayedUsersByOccupation: computed(() => {
+      if (!store.filteredOccupation()) return store.displayedUsers();
+      return store.displayedUsers().filter(data => data.occupation?.toLowerCase().includes(store.filteredOccupation()!));
+    })
   })),
 
   withHooks((store) => ({

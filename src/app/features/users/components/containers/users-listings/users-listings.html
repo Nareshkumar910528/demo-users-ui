@@ -9,7 +9,17 @@
     <span [class]="usersStore.progressState()">{{ usersStore.progressMessage() }}</span>
   </div>
 
-  <app-users-data-table [usersData]="usersStore.displayedUsers()" />
+  <div class="filter-container">
+    <div>
+        <label>Filter by Occupation: </label>
+        <input type="text" placeholder="eg: pilot" [value]="usersStore.filteredOccupation()"
+            (input)="usersStore.setFilteredOccupation(($event.target.value))" />
+    </div>
+
+    <button class="cta-btn" type="button" (click)="usersStore.clearFilteredOcupation()">Clear</button>
+  </div>
+
+  <app-users-data-table [usersData]="usersStore.filteredDisplayedUsersByOccupation()" />
 
   <button class="cta-btn" (click)="usersStore.userLogout()">
     Logout

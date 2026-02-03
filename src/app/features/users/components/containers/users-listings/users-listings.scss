@@ -22,6 +22,12 @@
     }
   }
 
+  .filter-container {
+    display: flex;
+    flex-direction: column;
+    margin-block: 1rem;
+  }
+
   .cta-btn {
     width: 5rem;
     padding: 0.5rem;

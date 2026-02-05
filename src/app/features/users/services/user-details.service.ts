@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { User } from "../models/users";
 import { delay, Observable, of } from "rxjs";
+import { API_DELAY_TIMING } from "../../../shared/constants/general";
 
 const USER_DETAILS: User[] = [
   { 
@@ -145,13 +146,13 @@ const USER_DETAILS: User[] = [
 export class UserDetailsService {
   getAllUserDetails(): Observable<User[]> {
     /** delay of 1000 milliseconds to indicate async operation */
-    return of(USER_DETAILS).pipe(delay(1000));
+    return of(USER_DETAILS).pipe(delay(API_DELAY_TIMING));
   }
 
   getUserByUniqueId(id: string): Observable<User | null> {
     const foundUserId = USER_DETAILS.find(data => data.id === id);
     
     /** delay of 1000 milliseconds to indicate async operation */
-    return of(foundUserId ? foundUserId : null).pipe(delay(1000));
+    return of(foundUserId ? foundUserId : null).pipe(delay(API_DELAY_TIMING));
   }
 }

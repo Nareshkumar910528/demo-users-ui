@@ -1,0 +1,1 @@
+export const getErrorMessage = () => 'Error has occurred';

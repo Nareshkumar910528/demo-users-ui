@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { User } from '../../../models';
 import { RouterLink } from '@angular/router';
 import { injectUsersStore } from '../../../stores';
+import { GAP_FROM_BOTTOM_IN_PX } from '../../../../../shared/constants/general';
 
 @Component({
   selector: 'app-users-data-table',
@@ -25,7 +26,7 @@ export class UsersDataTable {
     /** scrollTop: indicates how far user has scrolled */
     /** clientHeight: display height that is interactable by user */
     /** scrollHeight: total height of the page that can be scrolled */
-    const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 10;
+    const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - GAP_FROM_BOTTOM_IN_PX;
 
     if (isAtBottom) {
       this.usersStore.loadMoreUserDataAsynchronously();

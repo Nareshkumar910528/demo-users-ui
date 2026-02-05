@@ -11,12 +11,14 @@
 
   <div class="filter-container">
     <div>
-        <label>Filter by Occupation: </label>
+      <label>
+        Filter by Occupation:
         <input type="text" placeholder="eg: pilot" [value]="usersStore.filteredOccupation()"
-            (input)="usersStore.setFilteredOccupation(($event.target.value))" />
+          (input)="usersStore.setFilteredOccupation(($event.target.value))" />
+      </label>
     </div>
 
-    <button class="cta-btn" type="button" (click)="usersStore.clearFilteredOcupation()">Clear</button>
+    <button class="cta-btn" type="button" (click)="usersStore.clearFilteredOccupation()">Clear</button>
   </div>
 
   <app-users-data-table [usersData]="usersStore.filteredDisplayedUsersByOccupation()" />

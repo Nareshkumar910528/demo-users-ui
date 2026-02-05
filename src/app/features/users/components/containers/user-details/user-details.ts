@@ -20,15 +20,10 @@ export class UserDetails implements OnInit, OnDestroy {
   uniqueUserId = toSignal(this.#route.paramMap.pipe(map((params) => params.get('userId'))));
 
   ngOnInit() {
-    if (!this.uniqueUserId()) return;
+    const uniqueUserId = this.uniqueUserId();
+    if (!uniqueUserId) return;
 
-    this.usersStore.getUserDataById({ userId: this.uniqueUserId()! });
-
-    /** selecting a user to view his/her details */
-    // this.usersStore.select(this.uniqueUserId()!);
-
-    /** check whether the user exists in store if navigates directly here */
-    // this.usersStore.userExistValidation({ userId: uniqueUserId });
+    this.usersStore.getUserDataById({ userId: uniqueUserId });
   }
 
   ngOnDestroy(): void {

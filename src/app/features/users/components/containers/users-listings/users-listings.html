@@ -13,8 +13,8 @@
     <div>
       <label>
         Filter by Occupation:
-        <input type="text" placeholder="eg: pilot" [value]="usersStore.filteredOccupation()"
-          (input)="usersStore.setFilteredOccupation(($event.target.value))" />
+        <input #occupationValue type="text" placeholder="eg: pilot" [value]="usersStore.filteredOccupation()"
+          (input)="usersStore.setFilteredOccupation(occupationValue.value)" />
       </label>
     </div>
 

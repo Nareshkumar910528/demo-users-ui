@@ -209,7 +209,8 @@ export const UsersStore = signalStore(
 
     const displayedUsers$ = toObservable(store.displayedUsers, { injector });
     const filteredOccupation$ = toObservable(store.filteredOccupation, { injector });
-
+    
+    /** filtered by user id */  
     const loadFilteredDisplayedUsersByOccupation = rxMethod<void>(
       pipe(
         switchMap(() =>
@@ -249,14 +250,6 @@ export const UsersStore = signalStore(
 
     /** set progress message based on the progress state */
     progressMessage: computed(() => PROGRESS_MESSAGE[store.progressState()]),
-
-    /** filtered by user id */
-    // filteredDisplayedUsersByOccupation: computed(() => {
-    //   if (!store.filteredOccupation()) return store.displayedUsers();
-    //   return store
-    //     .displayedUsers()
-    //     .filter((data) => data.occupation?.toLowerCase().includes(store.filteredOccupation()!));
-    // }),
   })),
 
   withHooks({

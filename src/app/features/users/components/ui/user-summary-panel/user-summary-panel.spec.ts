@@ -20,4 +20,12 @@ describe('UserSummaryPanel', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display emptyData message if no data found', () => {
+    expect(component.emptyData).toBe('No user data found at the moment');
+  });
+
+  it('should have selectedUser as null by default', () => {
+    expect(component.selectedUser).toBeNull();
+  });
 });

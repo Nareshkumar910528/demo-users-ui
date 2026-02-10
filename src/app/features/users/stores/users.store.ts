@@ -1,4 +1,11 @@
-import { patchState, signalStore, withComputed, withMethods, withState, withHooks } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+  withHooks,
+} from '@ngrx/signals';
 import { ProgressState, User } from '../models/index';
 import { UserDetailsService } from '../services';
 import { computed, EnvironmentInjector, inject } from '@angular/core';
@@ -39,8 +46,6 @@ const initialState: TUsersState = {
   errorMessage: null,
   filteredDisplayedUsersByOccupation: [],
 };
-
-
 
 export const PROGRESS_MESSAGE = {
   idle: '',
@@ -209,8 +214,8 @@ export const UsersStore = signalStore(
 
     const displayedUsers$ = toObservable(store.displayedUsers, { injector });
     const filteredOccupation$ = toObservable(store.filteredOccupation, { injector });
-    
-    /** filtered by user id */  
+
+    /** filtered by user id */
     const loadFilteredDisplayedUsersByOccupation = rxMethod<void>(
       pipe(
         switchMap(() =>

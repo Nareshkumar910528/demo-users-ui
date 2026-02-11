@@ -1,0 +1,18 @@
+<form [formGroup]="todoListForm" (ngSubmit)="onSubmit()">
+    <input class="right-gap-10" type="text" formControlName="task" placeholder="Add a task" />
+    <button type="submit" class="cta-btn" [disabled]="todoListForm.invalid">Add New Task</button>
+</form>
+
+@for (data of usersStore.list(); track data.id) {
+<ul>
+    <li>
+        <span class="right-gap-10">{{ data.id }}</span>
+        <span class="right-gap-10">{{ data.item }}</span>
+        <button type="button" class="cta-btn" (click)="onDelete(data.id)">Delete</button>
+    </li>
+</ul>
+}
+
+<button class="cta-btn" routerLink="/users">
+    Back to Users Listing
+</button>

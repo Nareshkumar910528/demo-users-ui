@@ -4,18 +4,16 @@ import {
   withComputed,
   withMethods,
   withState,
-  withHooks,
 } from '@ngrx/signals';
 import { ProgressState, User } from '../models/index';
 import { UserDetailsService } from '../services';
-import { computed, EnvironmentInjector, inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { combineLatest, pipe, timer } from 'rxjs';
-import { exhaustMap, filter, map, switchMap, tap } from 'rxjs/operators';
+import { pipe, timer } from 'rxjs';
+import { exhaustMap, filter, map, tap } from 'rxjs/operators';
 import { tapResponse } from '@ngrx/operators';
 import { getErrorMessage } from '../../../shared/utils/error-handler.util';
 import { API_DELAY_TIMING } from '../../../shared/constants/general';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 interface TUsersState {
   entireUsers: User[];
@@ -154,7 +152,6 @@ export const UsersStore = signalStore(
       pipe(
         /** convert the object into a string */
         map(({ userId }) => userId),
-
         tap(() =>
           patchState(store, {
             userDataBySelectedId: null,
@@ -209,36 +206,6 @@ export const UsersStore = signalStore(
     },
   })),
 
-  withMethods((store) => {
-    const injector = inject(EnvironmentInjector);
-
-    const displayedUsers$ = toObservable(store.displayedUsers, { injector });
-    const filteredOccupation$ = toObservable(store.filteredOccupation, { injector });
-
-    /** filtered by user id */
-    const loadFilteredDisplayedUsersByOccupation = rxMethod<void>(
-      pipe(
-        switchMap(() =>
-          combineLatest([displayedUsers$, filteredOccupation$]).pipe(
-            map(([users, occupation]) => {
-              const occ = occupation?.trim().toLowerCase();
-              if (!occ) return users;
-
-              return users.filter((u) => u.occupation?.toLowerCase().includes(occ));
-            }),
-            tap((filteredUsers) => {
-              patchState(store, { filteredDisplayedUsersByOccupation: filteredUsers });
-            }),
-          ),
-        ),
-      ),
-    );
-
-    return {
-      loadFilteredDisplayedUsersByOccupation,
-    };
-  }),
-
   /** derived the state */
   withComputed((store) => ({
     /** to compute the realtime number of users */
@@ -255,13 +222,15 @@ export const UsersStore = signalStore(
 
     /** set progress message based on the progress state */
     progressMessage: computed(() => PROGRESS_MESSAGE[store.progressState()]),
-  })),
 
-  withHooks({
-    onInit(store) {
-      store.loadFilteredDisplayedUsersByOccupation();
-    },
-  }),
+    filteredDisplayedUsersByOccupation: computed(() => {
+      const users = store.displayedUsers();
+      const occ = store.filteredOccupation()?.trim().toLowerCase();
+
+      if (!occ) return users;
+      return users.filter((u) => u.occupation?.toLowerCase().includes(occ));
+    }),
+  })),
 );
 
 export const injectUsersStore = () => inject(UsersStore);

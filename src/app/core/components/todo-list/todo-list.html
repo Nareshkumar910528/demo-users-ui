@@ -3,7 +3,7 @@
     <button type="submit" class="cta-btn" [disabled]="todoListForm.invalid">Add New Task</button>
 </form>
 
-@for (data of usersStore.list(); track data.id) {
+@for (data of todoListStore.list(); track data.id) {
 <ul>
     <li>
         <span class="right-gap-10">{{ data.id }}</span>

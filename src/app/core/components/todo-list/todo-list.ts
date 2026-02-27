@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoList {
-  readonly usersStore = injectTodoListStore();
+  readonly todoListStore = injectTodoListStore();
 
   todoListForm = new FormGroup({
     task: new FormControl<string>(''),
@@ -23,7 +23,7 @@ export class TodoList {
     const taskValue = this.todoListForm.controls.task.value;
 
     if (taskValue) {
-      const isTaskAdded = this.usersStore.addTodoTask(taskValue);
+      const isTaskAdded = this.todoListStore.addTodoTask(taskValue);
 
       if (isTaskAdded) {
         this.todoListForm.reset({ task: '' });
@@ -32,6 +32,6 @@ export class TodoList {
   }
 
   onDelete(itemId: string) {
-    this.usersStore.deleteExistingTask(itemId);
+    this.todoListStore.deleteExistingTask(itemId);
   }
 }
